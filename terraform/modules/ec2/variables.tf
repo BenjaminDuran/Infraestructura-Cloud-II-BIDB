@@ -2,10 +2,6 @@ variable "project" {
   type = string
 }
 
-variable "region" {
-  type = string
-}
-
 variable "instance_type" {
   type    = string
   default = "t3.micro"
@@ -24,40 +20,6 @@ variable "key_pair_name" {
 }
 
 variable "instance_profile_name" {
-  description = "Nombre del Instance Profile (ej. LabInstanceProfile en Learner Lab)"
+  description = "Instance Profile (LabInstanceProfile en Learner Lab)"
   type        = string
-}
-
-variable "ecr_registry" {
-  type = string
-}
-
-variable "backend_repo" {
-  type = string
-}
-
-variable "frontend_repo" {
-  type = string
-}
-
-variable "image_tag" {
-  type    = string
-  default = "latest"
-}
-
-variable "db_host" {
-  type = string
-}
-
-variable "db_user" {
-  type = string
-}
-
-variable "db_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "db_name" {
-  type = string
 }

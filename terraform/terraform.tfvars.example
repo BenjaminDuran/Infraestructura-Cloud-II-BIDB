@@ -16,8 +16,5 @@ instance_profile_name = "LabInstanceProfile"
 # DB
 db_name     = "tienda_tecnologica"
 db_user     = "admin"
-db_password = "CambiameSegura123!"
+db_password = "CambiameSegura123"
 db_multi_az = true
-
-# Imagen a desplegar
-image_tag = "latest"

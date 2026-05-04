@@ -60,11 +60,6 @@ variable "instance_type" {
   default = "t3.micro"
 }
 
-variable "image_tag" {
-  type    = string
-  default = "latest"
-}
-
 variable "db_name" {
   type    = string
   default = "tienda_tecnologica"

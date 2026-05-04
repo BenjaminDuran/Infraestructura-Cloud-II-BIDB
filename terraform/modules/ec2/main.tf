@@ -19,17 +19,7 @@ data "aws_ami" "amazon_linux_2023" {
 }
 
 locals {
-  user_data = templatefile("${path.module}/user_data.sh.tpl", {
-    region        = var.region
-    ecr_registry  = var.ecr_registry
-    backend_repo  = var.backend_repo
-    frontend_repo = var.frontend_repo
-    image_tag     = var.image_tag
-    db_host       = var.db_host
-    db_user       = var.db_user
-    db_password   = var.db_password
-    db_name       = var.db_name
-  })
+  user_data = file("${path.module}/user_data.sh.tpl")
 }
 
 resource "aws_instance" "this" {

@@ -50,22 +50,9 @@ module "ec2" {
   source = "./modules/ec2"
 
   project               = var.project
-  region                = var.region
   instance_type         = var.instance_type
   subnet_id             = module.vpc.public_subnet_ids[0]
   security_group_id     = module.security.ec2_sg_id
   key_pair_name         = module.security.key_pair_name
   instance_profile_name = var.instance_profile_name
-
-  ecr_registry  = local.ecr_registry
-  backend_repo  = var.ecr_repos[0]
-  frontend_repo = var.ecr_repos[1]
-  image_tag     = var.image_tag
-
-  db_host     = module.rds.endpoint
-  db_user     = var.db_user
-  db_password = var.db_password
-  db_name     = var.db_name
-
-  depends_on = [module.rds, module.ecr]
 }
