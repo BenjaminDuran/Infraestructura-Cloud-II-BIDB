@@ -1,0 +1,23 @@
+project       = "tienda-tech"
+environment   = "dev"
+region        = "us-east-1"
+
+# CIDR del admin para SSH (TU IP publica /32)
+admin_ip_cidr = "1.2.3.4/32"
+
+# Key pair: crear desde llave publica local
+create_key_pair = true
+key_pair_name   = "tienda-tech-key"
+ssh_public_key  = "ssh-rsa AAAA... user@host"
+
+# Instance profile - en Learner Lab dejar LabInstanceProfile
+instance_profile_name = "LabInstanceProfile"
+
+# DB
+db_name     = "tienda_tecnologica"
+db_user     = "admin"
+db_password = "CambiameSegura123!"
+db_multi_az = true
+
+# Imagen a desplegar
+image_tag = "latest"

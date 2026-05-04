@@ -1,0 +1,77 @@
+name: Destroy tienda-tech
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Escribir DESTROY para confirmar'
+        required: true
+        default: ''
+
+env:
+  AWS_REGION: us-east-1
+  TF_DIR: terraform
+
+jobs:
+  destroy:
+    name: Terraform destroy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validar confirmacion
+        if: ${{ github.event.inputs.confirm != 'DESTROY' }}
+        run: |
+          echo "Confirmacion invalida. Escribir 'DESTROY' exacto."
+          exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (Learner Lab temp creds)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
+      - name: Generate S3 backend config
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          cat > backend.tf <<EOF
+          terraform {
+            backend "s3" {}
+          }
+          EOF
+
+      - name: Terraform init
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="key=tienda-tech/terraform.tfstate" \
+            -backend-config="region=${{ env.AWS_REGION }}"
+
+      - name: Write tfvars (necesario para destroy)
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          cat > ci.auto.tfvars <<EOF
+          admin_ip_cidr         = "${{ secrets.ADMIN_IP_CIDR }}"
+          create_key_pair       = true
+          key_pair_name         = "tienda-tech-key"
+          ssh_public_key        = "${{ secrets.SSH_PUBLIC_KEY }}"
+          instance_profile_name = "LabInstanceProfile"
+          db_password           = "${{ secrets.DB_PASSWORD }}"
+          EOF
+
+      - name: Terraform destroy
+        working-directory: ${{ env.TF_DIR }}
+        run: terraform destroy -auto-approve
+
+      - name: Resumen
+        run: echo "Infraestructura destruida."
