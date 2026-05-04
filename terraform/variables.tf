@@ -35,12 +35,12 @@ variable "admin_ip_cidr" {
 
 variable "create_key_pair" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "key_pair_name" {
   type    = string
-  default = "tienda-tech-key"
+  default = "vockey"
 }
 
 variable "ssh_public_key" {

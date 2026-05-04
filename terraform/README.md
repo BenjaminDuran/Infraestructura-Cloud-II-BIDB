@@ -37,11 +37,10 @@ Infra modular para la app `tienda-tech` (frontend Nginx + backend Node + MySQL R
      --bucket tienda-tech-tfstate-<sufijo-unico> \
      --versioning-configuration Status=Enabled
    ```
-3. **Key pair SSH** local:
-   ```bash
-   ssh-keygen -t rsa -b 4096 -f ~/.ssh/tienda-tech-key -N ""
-   cat ~/.ssh/tienda-tech-key.pub   # esta es ssh_public_key
-   ```
+3. **Key pair SSH del Lab** (`vockey`):
+   - En AWS Details > Download PEM > guarda como `labsuser.pem`.
+   - `chmod 400 labsuser.pem`
+   - Esta key ya existe en EC2 como `vockey`. No se crea via Terraform.
 4. Tu IP publica:
    ```bash
    curl -s ifconfig.me   # usar como X.X.X.X/32
@@ -84,8 +83,15 @@ terraform output
 ## Workflows GitHub Actions
 
 ### `deploy.yml`
-- Trigger: push a `main` (cambios en backend/frontend/terraform) o `workflow_dispatch`.
+- Trigger: push de tag `v*.*.*` (ej `v1.0.0`) o `workflow_dispatch`.
+- `image_tag` por defecto = nombre del git tag (`github.ref_name`). Override manual via dispatch.
 - Pasos: configura creds -> init -> apply ECR -> build/push imagenes -> apply full -> SSH a EC2 -> `docker compose pull && up -d`.
+
+**Lanzar despliegue con tag**:
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ### `destroy.yml`
 - Trigger: solo `workflow_dispatch`. Pide escribir `DESTROY` para confirmar.
@@ -100,14 +106,14 @@ terraform output
 | `AWS_SESSION_TOKEN`       | Lab credentials (renovar al iniciar nueva sesion lab)  |
 | `TF_STATE_BUCKET`         | Nombre del bucket S3 para state                        |
 | `ADMIN_IP_CIDR`           | Tu IP publica `/32` para SSH (ej `1.2.3.4/32`)         |
-| `SSH_PUBLIC_KEY`          | Contenido `~/.ssh/tienda-tech-key.pub`                 |
-| `SSH_PRIVATE_KEY`         | Contenido `~/.ssh/tienda-tech-key` (privada)           |
+| `SSH_PRIVATE_KEY`         | Contenido completo de `labsuser.pem` (key del Lab)     |
 | `DB_PASSWORD`             | Password MySQL                                         |
 
 ## Acceso SSH
 
 ```bash
-ssh -i ~/.ssh/tienda-tech-key ec2-user@<EIP>
+chmod 400 labsuser.pem
+ssh -i labsuser.pem ec2-user@<EIP>
 ```
 
 Solo desde la IP definida en `admin_ip_cidr`. Si tu IP cambia: editar variable y `terraform apply`.

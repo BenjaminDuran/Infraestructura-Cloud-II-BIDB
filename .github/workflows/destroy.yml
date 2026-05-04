@@ -62,9 +62,8 @@ jobs:
         run: |
           cat > ci.auto.tfvars <<EOF
           admin_ip_cidr         = "${{ secrets.ADMIN_IP_CIDR }}"
-          create_key_pair       = true
-          key_pair_name         = "tienda-tech-key"
-          ssh_public_key        = "${{ secrets.SSH_PUBLIC_KEY }}"
+          create_key_pair       = false
+          key_pair_name         = "vockey"
           instance_profile_name = "LabInstanceProfile"
           db_password           = "${{ secrets.DB_PASSWORD }}"
           EOF

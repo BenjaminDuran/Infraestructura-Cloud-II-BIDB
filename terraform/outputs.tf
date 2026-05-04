@@ -12,7 +12,7 @@ output "backend_url" {
 }
 
 output "ssh_command" {
-  value = "ssh -i ${var.key_pair_name}.pem ec2-user@${module.ec2.public_ip}"
+  value = "ssh -i labsuser.pem ec2-user@${module.ec2.public_ip}"
 }
 
 output "rds_endpoint" {

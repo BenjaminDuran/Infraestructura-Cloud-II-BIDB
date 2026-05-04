@@ -5,10 +5,10 @@ region        = "us-east-1"
 # CIDR del admin para SSH (TU IP publica /32)
 admin_ip_cidr = "1.2.3.4/32"
 
-# Key pair: crear desde llave publica local
-create_key_pair = true
-key_pair_name   = "tienda-tech-key"
-ssh_public_key  = "ssh-rsa AAAA... user@host"
+# Key pair: usar la del Lab (vockey ya existe)
+create_key_pair = false
+key_pair_name   = "vockey"
+ssh_public_key  = ""
 
 # Instance profile - en Learner Lab dejar LabInstanceProfile
 instance_profile_name = "LabInstanceProfile"
