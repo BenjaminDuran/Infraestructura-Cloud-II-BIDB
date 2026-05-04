@@ -8,19 +8,32 @@ Aplicación de ejemplo en 3 capas usando Docker y Docker Compose:
 
 ## Estructura del proyecto
 
-tienda-tech-EC2
+```
+tienda-tech-EC2/
 ├── docker-compose.yml
-├── tienda-tech-frontend
+├── tienda-tech-frontend/
 │   ├── Dockerfile
 │   ├── index.html
-│   └── app.js
+│   ├── app.js
 │   └── nginx.conf
-├── tienda-tech-backend
+├── tienda-tech-backend/
 │   ├── Dockerfile
 │   ├── package.json
 │   └── server.js
-└── tienda-tech-db
-    └── init.sql
+├── tienda-tech-db/
+│   └── init.sql
+└── terraform/
+    ├── main.tf
+    ├── variables.tf
+    ├── outputs.tf
+    ├── providers.tf
+    └── modules/
+        ├── vpc/
+        ├── security/
+        ├── ecr/
+        ├── rds/
+        └── ec2/
+```
 
 ## Requisitos
 1. Docker instalado en EC2:
